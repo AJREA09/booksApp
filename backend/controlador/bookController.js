@@ -12,9 +12,15 @@ exports.getAllBooks = async (req, res) => {
 exports.getById = async (req, res) => {
   try {
     const { id } = req.params;
-    const books = await Book.findByPk(id);
-    res.json(books);
+    const book = await Book.findByPk(id);
+    
+    if (!book) {
+      return res.status(404).json({ message: "Libro no encontrado" });
+    }
+    
+    res.json(book);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error al buscar el libro:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
   }
 };
